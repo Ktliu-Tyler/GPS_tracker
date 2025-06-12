@@ -1,0 +1,8 @@
+[console_scripts]
+gps_animate = gps_tracker.gps_animate:main
+gps_animate_imd = gps_tracker.gps_animate_imd:main
+gps_google_map = gps_tracker.gps_google_map:main
+gps_logger = gps_tracker.gps_logger_node:main
+gps_test_pub = gps_tracker.gps_test_publisher:main
+gps_visualizer = gps_tracker.gps_visualizer_node:main
+

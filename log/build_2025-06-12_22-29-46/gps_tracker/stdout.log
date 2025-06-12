@@ -1,0 +1,63 @@
+running egg_info
+creating build/gps_tracker/gps_tracker.egg-info
+writing build/gps_tracker/gps_tracker.egg-info/PKG-INFO
+writing dependency_links to build/gps_tracker/gps_tracker.egg-info/dependency_links.txt
+writing entry points to build/gps_tracker/gps_tracker.egg-info/entry_points.txt
+writing requirements to build/gps_tracker/gps_tracker.egg-info/requires.txt
+writing top-level names to build/gps_tracker/gps_tracker.egg-info/top_level.txt
+writing manifest file 'build/gps_tracker/gps_tracker.egg-info/SOURCES.txt'
+reading manifest file 'build/gps_tracker/gps_tracker.egg-info/SOURCES.txt'
+writing manifest file 'build/gps_tracker/gps_tracker.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build
+creating /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib
+creating /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker
+copying gps_tracker/__init__.py -> /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker
+copying gps_tracker/test.py -> /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker
+copying gps_tracker/gps_visualizer_node.py -> /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker
+copying gps_tracker/gps_test_publisher.py -> /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker
+copying gps_tracker/gps_can.py -> /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker
+copying gps_tracker/gps_animate.py -> /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker
+copying gps_tracker/gps_google_map.py -> /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker
+copying gps_tracker/gps_animate_imd.py -> /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker
+copying gps_tracker/gps_logger_node.py -> /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker
+running install
+running install_lib
+creating /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker
+copying /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker/__init__.py -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker
+copying /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker/test.py -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker
+copying /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker/gps_visualizer_node.py -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker
+copying /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker/gps_test_publisher.py -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker
+copying /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker/gps_can.py -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker
+copying /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker/gps_animate.py -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker
+copying /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker/gps_google_map.py -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker
+copying /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker/gps_animate_imd.py -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker
+copying /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker/gps_logger_node.py -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker
+byte-compiling /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker/test.py to test.cpython-310.pyc
+byte-compiling /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker/gps_visualizer_node.py to gps_visualizer_node.cpython-310.pyc
+byte-compiling /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker/gps_test_publisher.py to gps_test_publisher.cpython-310.pyc
+byte-compiling /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker/gps_can.py to gps_can.cpython-310.pyc
+byte-compiling /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker/gps_animate.py to gps_animate.cpython-310.pyc
+byte-compiling /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker/gps_google_map.py to gps_google_map.cpython-310.pyc
+byte-compiling /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker/gps_animate_imd.py to gps_animate_imd.cpython-310.pyc
+byte-compiling /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker/gps_logger_node.py to gps_logger_node.cpython-310.pyc
+running install_data
+creating /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/share/ament_index
+creating /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/share/ament_index/resource_index
+creating /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/share/ament_index/resource_index/packages
+copying resource/gps_tracker -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/share/ament_index/resource_index/packages
+copying package.xml -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/share/gps_tracker
+creating /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/share/gps_tracker/launch
+copying gps_tracker/launch/launch_file.py -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/share/gps_tracker/launch
+running install_egg_info
+Copying build/gps_tracker/gps_tracker.egg-info to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker-0.0.0-py3.10.egg-info
+running install_scripts
+Installing gps_animate script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_animate_imd script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_google_map script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_logger script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_test_pub script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_visualizer script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+writing list of installed files to '/home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/install.log'
