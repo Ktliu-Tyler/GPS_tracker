@@ -31,7 +31,7 @@ setup(
         'gps_csv_logger = gps_tracker.gps_csv_logger:main',
         'gps_can_pub = gps_tracker.gps_can_pub:main',
         'nmea_ntrip_driver = gps_tracker.nmea_ntrip_driver:main',
-        'timer_can_pub = gps_tracker.timer_can_pub:main',
+        'timer_can_pub = gps_tracker.timer_can_pub:main'
     ],
 },
 )

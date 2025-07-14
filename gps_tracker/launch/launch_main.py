@@ -46,6 +46,16 @@ def generate_launch_description():
             respawn=True,
             respawn_delay=2.0
         ),
+        
+        Node(
+            package='gps_tracker',
+            executable='nmea_ntrip_driver',
+            name='gps_node',
+            output='screen',
+            parameters=[],
+            respawn=True,
+            respawn_delay=2.0
+        ),
 
         # 顯示資訊
         ExecuteProcess(
