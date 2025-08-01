@@ -1,0 +1,16 @@
+[console_scripts]
+can_test_pub = gps_tracker.can_test_publisher:main
+gps_animate = gps_tracker.gps_animate:main
+gps_animate_imd = gps_tracker.gps_animate_imd:main
+gps_can_pub = gps_tracker.gps_can_pub:main
+gps_can_pub_newEncode = gps_tracker.gps_can_pub_newEncode:main
+gps_can_rec = gps_tracker.gps_can_rec:main
+gps_csv_logger = gps_tracker.gps_csv_logger:main
+gps_google_map = gps_tracker.gps_google_map:main
+gps_logger = gps_tracker.gps_logger_node:main
+gps_test_pub = gps_tracker.gps_test_publisher:main
+gps_visualizer = gps_tracker.gps_visualizer_node:main
+nmea_ntrip_driver = gps_tracker.nmea_ntrip_driver:main
+system_test_pub = gps_tracker.system_test_publisher:main
+timer_can_pub = gps_tracker.timer_can_pub:main
+

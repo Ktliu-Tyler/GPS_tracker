@@ -1,0 +1,41 @@
+running egg_info
+writing build/gps_tracker/gps_tracker.egg-info/PKG-INFO
+writing dependency_links to build/gps_tracker/gps_tracker.egg-info/dependency_links.txt
+writing entry points to build/gps_tracker/gps_tracker.egg-info/entry_points.txt
+writing requirements to build/gps_tracker/gps_tracker.egg-info/requires.txt
+writing top-level names to build/gps_tracker/gps_tracker.egg-info/top_level.txt
+reading manifest file 'build/gps_tracker/gps_tracker.egg-info/SOURCES.txt'
+writing manifest file 'build/gps_tracker/gps_tracker.egg-info/SOURCES.txt'
+running build
+running build_py
+copying gps_tracker/test_csv_dashboard.py -> /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker
+copying gps_tracker/gps_rec_with_csv.py -> /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker
+copying gps_tracker/check_csv.py -> /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker
+running install
+running install_lib
+copying /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker/test_csv_dashboard.py -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker
+copying /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker/gps_rec_with_csv.py -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker
+copying /home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/build/lib/gps_tracker/check_csv.py -> /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker
+byte-compiling /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker/test_csv_dashboard.py to test_csv_dashboard.cpython-310.pyc
+byte-compiling /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker/gps_rec_with_csv.py to gps_rec_with_csv.cpython-310.pyc
+byte-compiling /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker/check_csv.py to check_csv.cpython-310.pyc
+running install_data
+running install_egg_info
+removing '/home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker-0.0.0-py3.10.egg-info' (and everything under it)
+Copying build/gps_tracker/gps_tracker.egg-info to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/python3.10/site-packages/gps_tracker-0.0.0-py3.10.egg-info
+running install_scripts
+Installing can_test_pub script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_animate script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_animate_imd script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_can_pub script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_can_pub_newEncode script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_can_rec script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_csv_logger script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_google_map script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_logger script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_test_pub script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing gps_visualizer script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing nmea_ntrip_driver script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing system_test_pub script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+Installing timer_can_pub script to /home/docker/ws/src/nturt_ros/gps_tracker/install/gps_tracker/lib/gps_tracker
+writing list of installed files to '/home/docker/ws/src/nturt_ros/gps_tracker/build/gps_tracker/install.log'

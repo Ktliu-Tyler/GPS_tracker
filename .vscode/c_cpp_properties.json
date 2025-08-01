@@ -1,0 +1,39 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/docker/ws/install/nturt_rpi_deployer/include/**",
+        "/home/docker/ws/install/nturt_can_parser/include/**",
+        "/home/docker/ws/install/ros2_socketcan/include/**",
+        "/home/docker/ws/install/nturt_screen_controller/include/**",
+        "/home/docker/ws/install/nturt_push_to_control_tower/include/**",
+        "/home/docker/ws/install/nturt_bag_recorder/include/**",
+        "/home/docker/ws/install/nturt_ros_interface/include/**",
+        "/home/docker/ws/install/nturt_realtime_utils/include/**",
+        "/home/docker/ws/install/nturt_led_controller/include/**",
+        "/home/docker/ws/install/nturt_can_config/include/**",
+        "/opt/ros/iron/include/**",
+        "/home/docker/ws/src/nturt_ros/nturt_bag_recorder/include/**",
+        "/home/docker/ws/src/nturt_ros/nturt_can_config/include/**",
+        "/home/docker/ws/src/nturt_ros/nturt_can_parser/include/**",
+        "/home/docker/ws/src/nturt_ros/nturt_led_controller/include/**",
+        "/home/docker/ws/src/nturt_ros/nturt_push_to_control_tower/include/**",
+        "/home/docker/ws/src/nturt_ros/nturt_realtime_utils/include/**",
+        "/home/docker/ws/src/nturt_ros/nturt_rpi_deployer/include/**",
+        "/home/docker/ws/src/nturt_ros/nturt_screen_controller/include/**",
+        "/home/docker/ws/src/nturt_ros/ros2_socketcan/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

@@ -1,0 +1,37 @@
+System,Name,Direction,Standard ID,Cycle time (ms),Byte 0,Byte 1,Byte 2,Byte 3,Byte 4,Byte 5,Byte 6,Byte 7,Description,Encoding,Range,Unit
+Timestamp,Timestamp,Transmit,0x100,1000,MS since midnight (LSB),MS since midnight,MS since midnight,MS since midnight (MSB),Days since 1984 (LSB),Days since 1984 (MSB),,,"Timer timestamp from 1984-01-01",32-bit + 16-bit little endian,0-86400000ms + 0-65535days,ms/days
+,,,,,,,,,,,,,,,,
+Ecumaster GPS,GPS Basic,Transmit,0x400,100,Latitude (LSB),Latitude,Latitude,Latitude (MSB),Longitude (LSB),Longitude,Longitude,Longitude (MSB),GPS coordinates,32-bit signed * 2,±90° ±180°,degrees
+Ecumaster GPS,GPS Extended,Transmit,0x401,100,Speed (LSB),Speed (MSB),Height (LSB),Height (MSB),Satellites,GPS Frame Index + Empty Frame Index,GPS Status,,Speed height satellites status,16-bit + 16-bit + 8-bit + mixed,±1179 ±32767 0-72,km/h m count
+Ecumaster GPS,Heading Angular,Transmit,0x402,100,Heading Motion (LSB),Heading Motion (MSB),Heading Vehicle (LSB),Heading Vehicle (MSB),X Angle Rate (LSB),X Angle Rate (MSB),Y Angle Rate (LSB),Y Angle Rate (MSB),Heading and angular rates,16-bit unsigned + 16-bit signed * 2,0-360° ±250°,degrees °/s
+Ecumaster GPS,Acceleration,Transmit,0x403,100,Z Angle Rate (LSB),Z Angle Rate (MSB),X Accel (LSB),X Accel (MSB),Y Accel (LSB),Y Accel (MSB),Z Accel (LSB),Z Accel (MSB),Angular rate and accelerations,16-bit signed * 4,±250° ±4g,°/s g
+,,,,,,,,,,,,,,,,
+Accumulator,Cell Voltage,Transmit,0x190,1000,Index N,Cell N+0,Cell N+1,Cell N+2,Cell N+3,Cell N+4,Cell N+5,Cell N+6,Battery cell voltages,8-bit index + 7x 8-bit unsigned,0-255 per cell,20mV/LSB
+Accumulator,Temperature,Transmit,0x390,1000,Index M,Sensor M+0,Sensor M+1,Sensor M+2,Sensor M+3,Sensor M+4,Sensor M+5,Sensor M+6,Temperature sensors,8-bit index + 7x 8-bit unsigned,0-255 per sensor,0.5°C/LSB
+Accumulator,Heartbeat,Transmit,0x710,100,0x7F,,,,,,,,,Heartbeat signal,8-bit constant,0x7F = OK,boolean
+Accumulator,Status,Transmit,0x290,200,Status,Temperature (LSB),Temperature (MSB),Voltage (LSB),Voltage (MSB),,,,Status temperature voltage,8-bit + 16-bit signed + 16-bit unsigned,0/1 ±32767 0-65535,boolean 0.125°C/LSB 1/1024V/LSB
+Accumulator,State,Transmit,0x490,200,SOC,Current (LSB),Current (MSB),Capacity (LSB),Capacity (MSB),,,,SOC current capacity,8-bit + 16-bit signed + 16-bit signed,0-100% ±32767 ±32767,1%/LSB 10mA/LSB 10mAh/LSB
+,,,,,,,,,,,,,,,,
+Inverter FL,Status,Transmit,0x191,10,Status word (LSB),Status word (MSB),Feedback Tq (LSB),Feedback Tq (MSB),Speed (LSB),Speed (MSB),,,Front Left inverter status,16-bit unsigned + 16-bit signed + 16-bit signed,0-65535 ±32767 ±32767,hex 1/1000 rated torque RPM
+Inverter FL,State,Transmit,0x291,100,DC volt (LSB),DC volt (MSB),DC current (LSB),DC current (MSB),,,,,,Front Left inverter power,16-bit unsigned + 16-bit unsigned,0-65535 0-65535,1/100V/LSB 1/100A/LSB
+Inverter FL,Temperature,Transmit,0x391,100,Inv MOS temp (LSB),Inv MOS temp (MSB),MCU temp (LSB),MCU temp (MSB),Motor temp (LSB),Motor temp (MSB),,,Front Left inverter temperatures,16-bit signed * 3,±32767 each,0.1°C/LSB
+Inverter FL,Heartbeat,Transmit,0x711,100,0x7F,,,,,,,,,Front Left heartbeat,8-bit constant,0x7F = OK,boolean
+Inverter FL,Control,Receive,0x211,N/A,Control word (LSB),Control word (MSB),Target Tq (LSB),Target Tq (MSB),,,,,,Front Left control commands,16-bit unsigned + 16-bit signed,0-65535 ±32767,hex 1/1000 rated torque
+,,,,,,,,,,,,,,,,
+Inverter FR,Status,Transmit,0x192,10,Status word (LSB),Status word (MSB),Feedback Tq (LSB),Feedback Tq (MSB),Speed (LSB),Speed (MSB),,,Front Right inverter status,16-bit unsigned + 16-bit signed + 16-bit signed,0-65535 ±32767 ±32767,hex 1/1000 rated torque RPM
+Inverter FR,State,Transmit,0x292,100,DC volt (LSB),DC volt (MSB),DC current (LSB),DC current (MSB),,,,,,Front Right inverter power,16-bit unsigned + 16-bit unsigned,0-65535 0-65535,1/100V/LSB 1/100A/LSB
+Inverter FR,Temperature,Transmit,0x392,100,Inv MOS temp (LSB),Inv MOS temp (MSB),MCU temp (LSB),MCU temp (MSB),Motor temp (LSB),Motor temp (MSB),,,Front Right inverter temperatures,16-bit signed * 3,±32767 each,0.1°C/LSB
+Inverter FR,Heartbeat,Transmit,0x712,100,0x7F,,,,,,,,,Front Right heartbeat,8-bit constant,0x7F = OK,boolean
+Inverter FR,Control,Receive,0x212,N/A,Control word (LSB),Control word (MSB),Target Tq (LSB),Target Tq (MSB),,,,,,Front Right control commands,16-bit unsigned + 16-bit signed,0-65535 ±32767,hex 1/1000 rated torque
+,,,,,,,,,,,,,,,,
+Inverter RL,Status,Transmit,0x193,10,Status word (LSB),Status word (MSB),Feedback Tq (LSB),Feedback Tq (MSB),Speed (LSB),Speed (MSB),,,Rear Left inverter status,16-bit unsigned + 16-bit signed + 16-bit signed,0-65535 ±32767 ±32767,hex 1/1000 rated torque RPM
+Inverter RL,State,Transmit,0x293,100,DC volt (LSB),DC volt (MSB),DC current (LSB),DC current (MSB),,,,,,Rear Left inverter power,16-bit unsigned + 16-bit unsigned,0-65535 0-65535,1/100V/LSB 1/100A/LSB
+Inverter RL,Temperature,Transmit,0x393,100,Inv MOS temp (LSB),Inv MOS temp (MSB),MCU temp (LSB),MCU temp (MSB),Motor temp (LSB),Motor temp (MSB),,,Rear Left inverter temperatures,16-bit signed * 3,±32767 each,0.1°C/LSB
+Inverter RL,Heartbeat,Transmit,0x713,100,0x7F,,,,,,,,,Rear Left heartbeat,8-bit constant,0x7F = OK,boolean
+Inverter RL,Control,Receive,0x213,N/A,Control word (LSB),Control word (MSB),Target Tq (LSB),Target Tq (MSB),,,,,,Rear Left control commands,16-bit unsigned + 16-bit signed,0-65535 ±32767,hex 1/1000 rated torque
+,,,,,,,,,,,,,,,,
+Inverter RR,Status,Transmit,0x194,10,Status word (LSB),Status word (MSB),Feedback Tq (LSB),Feedback Tq (MSB),Speed (LSB),Speed (MSB),,,Rear Right inverter status,16-bit unsigned + 16-bit signed + 16-bit signed,0-65535 ±32767 ±32767,hex 1/1000 rated torque RPM
+Inverter RR,State,Transmit,0x294,100,DC volt (LSB),DC volt (MSB),DC current (LSB),DC current (MSB),,,,,,Rear Right inverter power,16-bit unsigned + 16-bit unsigned,0-65535 0-65535,1/100V/LSB 1/100A/LSB
+Inverter RR,Temperature,Transmit,0x394,100,Inv MOS temp (LSB),Inv MOS temp (MSB),MCU temp (LSB),MCU temp (MSB),Motor temp (LSB),Motor temp (MSB),,,Rear Right inverter temperatures,16-bit signed * 3,±32767 each,0.1°C/LSB
+Inverter RR,Heartbeat,Transmit,0x714,100,0x7F,,,,,,,,,Rear Right heartbeat,8-bit constant,0x7F = OK,boolean
+Inverter RR,Control,Receive,0x214,N/A,Control word (LSB),Control word (MSB),Target Tq (LSB),Target Tq (MSB),,,,,,Rear Right control commands,16-bit unsigned + 16-bit signed,0-65535 ±32767,hex 1/1000 rated torque

@@ -1,0 +1,38 @@
+Name,Direction,Standard ID,Cycle time (ms),0,1,2,3,4,5,6,7,Description
+GPS Basic,Transmit,0x400,100,Latitude (int32/1E-7) (signed),,,Longitude (int32/1E-7) (signed),,,,,GPS coordinates
+GPS Extended,Transmit,0x401,100,Speed (0.036km/h/LSB) (signed),Altitude (1m/LSB) (signed),Satellites,Frame Status,GPS Status,Reserved,,,GPS speed altitude status
+GPS Heading,Transmit,0x402,20,Heading Motion (1deg/LSB) (unsigned),Heading Vehicle (1deg/LSB) (unsigned),X Angle Rate (0.01deg/s/LSB) (signed),Y Angle Rate (0.01deg/s/LSB) (signed),,,,,GPS heading and angular rates
+GPS Acceleration,Transmit,0x403,20,Z Angle Rate (0.01deg/s/LSB) (signed),X Accel (0.01g/LSB) (signed),Y Accel (0.01g/LSB) (signed),Z Accel (0.01g/LSB) (signed),,,,,GPS Z angular rate and acceleration
+Velocity X,Transmit,0x404,20,X Velocity (0.001m/s/LSB) (signed),,,Reserved,,,,,X direction linear velocity
+Velocity Y,Transmit,0x405,20,Y Velocity (0.001m/s/LSB) (signed),,,Reserved,,,,,Y direction linear velocity
+Velocity Z,Transmit,0x406,20,Z Velocity (0.001m/s/LSB) (signed),,,Reserved,,,,,Z direction linear velocity
+Angular X,Transmit,0x407,20,X Angular (0.001rad/s/LSB) (signed),,,Reserved,,,,,X axis angular velocity detail
+Angular Y,Transmit,0x408,20,Y Angular (0.001rad/s/LSB) (signed),,,Reserved,,,,,Y axis angular velocity detail
+Angular Z,Transmit,0x409,20,Z Angular (0.001rad/s/LSB) (signed),,,Reserved,,,,,Z axis angular velocity detail
+Velocity Mag,Transmit,0x40A,20,Velocity Magnitude (0.001m/s/LSB) (signed),,,Reserved,,,,,Total velocity magnitude
+Timestamp,Transmit,0x100,1000,MS since midnight (uint32),Days since 1984 (uint16),Reserved,,,,,System timestamp
+Cell Voltage,Transmit,0x190,1000,Index N,Cell N+0,Cell N+1,Cell N+2,Cell N+3,Cell N+4,Cell N+5,Cell N+6,20mV/LSB unsigned
+Temperature,Transmit,0x390,1000,Index M,Sensor M+0,Sensor M+1,Sensor M+2,Sensor M+3,Sensor M+4,Sensor M+5,Sensor M+6,0.5C/LSB unsigned
+Heartbeat,Transmit,0x710,100,,0x7F,,,,,,,
+Status,Transmit,0x290,200,Status (0=Bad 1=OK),Temperature (0.125C/LSB) (signed),Voltage (1/1024V/LSB) (signed),,,,,
+State,Transmit,0x490,200,SOC (1%/LSB),Current (10mA/LSB) (signed),Capacity (10mAh/LSB) (signed),,,,,
+Status FL,Transmit,0x191,10,Status word,Feedback Tq (1/1000rated trq/LSB) (signed),Speed (RPM/LSB) (signed),,,,,Front Left Inverter Status
+Status FR,Transmit,0x192,10,Status word,Feedback Tq (1/1000rated trq/LSB) (signed),Speed (RPM/LSB) (signed),,,,,Front Right Inverter Status
+Status RL,Transmit,0x193,10,Status word,Feedback Tq (1/1000rated trq/LSB) (signed),Speed (RPM/LSB) (signed),,,,,Rear Left Inverter Status
+Status RR,Transmit,0x194,10,Status word,Feedback Tq (1/1000rated trq/LSB) (signed),Speed (RPM/LSB) (signed),,,,,Rear Right Inverter Status
+State FL,Transmit,0x291,100,DC Volt (1/100V/LSB) (unsigned),DC Current (1/100A/LSB) (unsigned),,,,,,,Front Left Inverter State
+State FR,Transmit,0x292,100,DC Volt (1/100V/LSB) (unsigned),DC Current (1/100A/LSB) (unsigned),,,,,,,Front Right Inverter State
+State RL,Transmit,0x293,100,DC Volt (1/100V/LSB) (unsigned),DC Current (1/100A/LSB) (unsigned),,,,,,,Rear Left Inverter State
+State RR,Transmit,0x294,100,DC Volt (1/100V/LSB) (unsigned),DC Current (1/100A/LSB) (unsigned),,,,,,,Rear Right Inverter State
+Temperature FL,Transmit,0x391,100,Inv MOS Temp (0.1C/LSB) (signed),MCU Temp (0.1C/LSB) (signed),Motor Temp (0.1C/LSB) (signed),,,,,Front Left Inverter Temperature
+Temperature FR,Transmit,0x392,100,Inv MOS Temp (0.1C/LSB) (signed),MCU Temp (0.1C/LSB) (signed),Motor Temp (0.1C/LSB) (signed),,,,,Front Right Inverter Temperature
+Temperature RL,Transmit,0x393,100,Inv MOS Temp (0.1C/LSB) (signed),MCU Temp (0.1C/LSB) (signed),Motor Temp (0.1C/LSB) (signed),,,,,Rear Left Inverter Temperature
+Temperature RR,Transmit,0x394,100,Inv MOS Temp (0.1C/LSB) (signed),MCU Temp (0.1C/LSB) (signed),Motor Temp (0.1C/LSB) (signed),,,,,Rear Right Inverter Temperature
+Heartbeat FL,Transmit,0x711,100,,0x7F,,,,,,,Front Left Inverter Heartbeat
+Heartbeat FR,Transmit,0x712,100,,0x7F,,,,,,,Front Right Inverter Heartbeat
+Heartbeat RL,Transmit,0x713,100,,0x7F,,,,,,,Rear Left Inverter Heartbeat
+Heartbeat RR,Transmit,0x714,100,,0x7F,,,,,,,Rear Right Inverter Heartbeat
+Control FL,Receive,0x211,N/A,Control word,Target Tq (1/1000rated trq/LSB) (signed),,,,,,,Front Left Inverter Control
+Control FR,Receive,0x212,N/A,Control word,Target Tq (1/1000rated trq/LSB) (signed),,,,,,,Front Right Inverter Control
+Control RL,Receive,0x213,N/A,Control word,Target Tq (1/1000rated trq/LSB) (signed),,,,,,,Rear Left Inverter Control
+Control RR,Receive,0x214,N/A,Control word,Target Tq (1/1000rated trq/LSB) (signed),,,,,,,Rear Right Inverter Control

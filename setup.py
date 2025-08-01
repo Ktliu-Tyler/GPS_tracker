@@ -30,8 +30,12 @@ setup(
         'gps_google_map = gps_tracker.gps_google_map:main',
         'gps_csv_logger = gps_tracker.gps_csv_logger:main',
         'gps_can_pub = gps_tracker.gps_can_pub:main',
+        'gps_can_pub_newEncode = gps_tracker.gps_can_pub_newEncode:main',
+        'gps_can_rec = gps_tracker.gps_can_rec:main',
         'nmea_ntrip_driver = gps_tracker.nmea_ntrip_driver:main',
-        'timer_can_pub = gps_tracker.timer_can_pub:main'
+        'timer_can_pub = gps_tracker.timer_can_pub:main',
+        'system_test_pub = gps_tracker.system_test_publisher:main',
+        'can_test_pub = gps_tracker.can_test_publisher:main',
     ],
 },
 )

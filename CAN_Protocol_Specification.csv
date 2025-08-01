@@ -1,0 +1,80 @@
+CAN ID,訊號名稱,系統,用途,資料長度(bytes),數據格式,字節位置,數據類型,描述,係數/乘數,單位,範圍,解碼公式,備註
+0x100,Timestamp,時間同步,系統時間同步,6,Little-endian,0-3,uint32,自午夜以來的毫秒數,1,ms,0-86400000,ms_since_midnight,
+0x100,Timestamp,時間同步,系統時間同步,6,Little-endian,4-5,uint16,自1984年以來的天數,1,days,0-65535,days_since_1984,
+0x400,GPS Basic,GPS,GPS座標資料,8,Little-endian,0-3,int32,緯度,1/10^7,度,±90.0,lat_raw / 10^7,
+0x400,GPS Basic,GPS,GPS座標資料,8,Little-endian,4-7,int32,經度,1/10^7,度,±180.0,lon_raw / 10^7,
+0x401,GPS Extended,GPS,GPS速度高度狀態,8,Little-endian,0-1,int16,速度,0.036,km/h,±1179,speed_raw * 0.036,來自TwistStamped
+0x401,GPS Extended,GPS,GPS速度高度狀態,8,Little-endian,2-3,int16,高度,1,m,±32767,alt_raw,來自NavSatFix
+0x401,GPS Extended,GPS,GPS速度高度狀態,8,Little-endian,4,uint8,衛星數量,1,個,0-255,satellites,預設值8
+0x401,GPS Extended,GPS,GPS速度高度狀態,8,Little-endian,5,uint8,框架狀態字節,-,-,-,frame_status_byte,GPS框架索引
+0x401,GPS Extended,GPS,GPS速度高度狀態,8,Little-endian,6,uint8,GPS狀態,-,-,-,status_byte,狀態碼
+0x401,GPS Extended,GPS,GPS速度高度狀態,8,Little-endian,7,uint8,保留,-,-,-,-,
+0x402,Heading Angular,GPS,航向和角速度,8,Little-endian,0-1,uint16,運動航向,1,度,0-360,heading_motion,預設值0(無感測器)
+0x402,Heading Angular,GPS,航向和角速度,8,Little-endian,2-3,uint16,車輛航向,1,度,0-360,heading_vehicle,預設值0(無感測器)
+0x402,Heading Angular,GPS,航向和角速度,8,Little-endian,4-5,int16,X軸角速度,0.01,°/s,±250,x_angle_rate_raw * 0.01,來自TwistStamped
+0x402,Heading Angular,GPS,航向和角速度,8,Little-endian,6-7,int16,Y軸角速度,0.01,°/s,±250,y_angle_rate_raw * 0.01,來自TwistStamped
+0x403,Acceleration,GPS,Z角速度和加速度,8,Little-endian,0-1,int16,Z軸角速度,0.01,°/s,±250,z_angle_rate_raw * 0.01,來自TwistStamped
+0x403,Acceleration,GPS,Z角速度和加速度,8,Little-endian,2-3,int16,X軸加速度,0.01,g,±4,x_accel_raw * 0.01,預設值0(無IMU)
+0x403,Acceleration,GPS,Z角速度和加速度,8,Little-endian,4-5,int16,Y軸加速度,0.01,g,±4,y_accel_raw * 0.01,預設值0(無IMU)
+0x403,Acceleration,GPS,Z角速度和加速度,8,Little-endian,6-7,int16,Z軸加速度,0.01,g,±4,z_accel_raw * 0.01,預設值0(無IMU)
+0x404,Velocity X,GPS擴展,X方向線性速度,8,Little-endian,0-3,int32,X方向速度,0.001,m/s,±2000,vx_raw / 1000.0,高精度
+0x404,Velocity X,GPS擴展,X方向線性速度,8,Little-endian,4-7,-,保留,-,-,-,-,
+0x405,Velocity Y,GPS擴展,Y方向線性速度,8,Little-endian,0-3,int32,Y方向速度,0.001,m/s,±2000,vy_raw / 1000.0,高精度
+0x405,Velocity Y,GPS擴展,Y方向線性速度,8,Little-endian,4-7,-,保留,-,-,-,-,
+0x406,Velocity Z,GPS擴展,Z方向線性速度,8,Little-endian,0-3,int32,Z方向速度,0.001,m/s,±2000,vz_raw / 1000.0,高精度
+0x406,Velocity Z,GPS擴展,Z方向線性速度,8,Little-endian,4-7,-,保留,-,-,-,-,
+0x407,Angular X,GPS擴展,X軸角速度詳細,8,Little-endian,0-3,int32,X軸角速度,0.001,rad/s,±2000,wx_raw / 1000.0,高精度
+0x407,Angular X,GPS擴展,X軸角速度詳細,8,Little-endian,4-7,-,保留,-,-,-,-,
+0x408,Angular Y,GPS擴展,Y軸角速度詳細,8,Little-endian,0-3,int32,Y軸角速度,0.001,rad/s,±2000,wy_raw / 1000.0,高精度
+0x408,Angular Y,GPS擴展,Y軸角速度詳細,8,Little-endian,4-7,-,保留,-,-,-,-,
+0x409,Angular Z,GPS擴展,Z軸角速度詳細,8,Little-endian,0-3,int32,Z軸角速度,0.001,rad/s,±2000,wz_raw / 1000.0,高精度
+0x409,Angular Z,GPS擴展,Z軸角速度詳細,8,Little-endian,4-7,-,保留,-,-,-,-,
+0x40A,Velocity Magnitude,GPS擴展,總速度大小,8,Little-endian,0-3,int32,總速度大小,0.001,m/s,0-2000,vmag_raw / 1000.0,計算值
+0x40A,Velocity Magnitude,GPS擴展,總速度大小,8,Little-endian,4-7,-,保留,-,-,-,-,
+0x190,Cell Voltage,蓄電池,電池單體電壓,8,Little-endian,0,uint8,電池組索引,1,-,0-255,index,
+0x190,Cell Voltage,蓄電池,電池單體電壓,8,Little-endian,1-7,uint8,電池電壓,0.02,V,0-5.1,voltage_raw * 0.02,20mV/LSB
+0x290,Accumulator Status,蓄電池,蓄電池狀態,8,Little-endian,0,uint8,狀態標誌,-,-,0=Bad/1=OK,status,
+0x290,Accumulator Status,蓄電池,蓄電池狀態,8,Little-endian,1-2,int16,溫度,0.125,°C,±4096,temp_raw * 0.125,
+0x290,Accumulator Status,蓄電池,蓄電池狀態,8,Little-endian,3-4,uint16,電壓,1/1024,V,0-64,voltage_raw / 1024.0,
+0x390,Accumulator Temperature,蓄電池,蓄電池溫度,8,Little-endian,0,uint8,溫度感測器索引,1,-,0-255,index,
+0x390,Accumulator Temperature,蓄電池,蓄電池溫度,8,Little-endian,1-7,uint8,溫度值,0.5,°C,0-127.5,temp_raw * 0.5,0.5°C/LSB
+0x490,Accumulator State,蓄電池,SOC電流容量,8,Little-endian,0,uint8,SOC電量百分比,1,%,0-100,soc_raw,
+0x490,Accumulator State,蓄電池,SOC電流容量,8,Little-endian,1-2,int16,電流,0.01,A,±327.67,current_raw * 0.01,10mA/LSB
+0x490,Accumulator State,蓄電池,SOC電流容量,8,Little-endian,3-4,int16,容量,0.01,Ah,±327.67,capacity_raw * 0.01,10mAh/LSB
+0x710,Accumulator Heartbeat,蓄電池,蓄電池心跳,1,Little-endian,0,uint8,心跳信號,-,-,0x7F=OK/其他=異常,heartbeat,
+0x191,Inverter Status FL,逆變器,前左逆變器狀態,8,Little-endian,0-1,uint16,狀態字,-,-,0x0000-0xFFFF,status_word,
+0x191,Inverter Status FL,逆變器,前左逆變器狀態,8,Little-endian,2-3,int16,回饋扭矩,0.001,額定扭矩,±32.767,feedback_torque_raw / 1000.0,
+0x191,Inverter Status FL,逆變器,前左逆變器狀態,8,Little-endian,4-5,int16,轉速,1,RPM,±32767,speed_raw,
+0x192,Inverter Status FR,逆變器,前右逆變器狀態,8,Little-endian,0-1,uint16,狀態字,-,-,0x0000-0xFFFF,status_word,同0x191格式
+0x192,Inverter Status FR,逆變器,前右逆變器狀態,8,Little-endian,2-3,int16,回饋扭矩,0.001,額定扭矩,±32.767,feedback_torque_raw / 1000.0,同0x191格式
+0x192,Inverter Status FR,逆變器,前右逆變器狀態,8,Little-endian,4-5,int16,轉速,1,RPM,±32767,speed_raw,同0x191格式
+0x193,Inverter Status RL,逆變器,後左逆變器狀態,8,Little-endian,0-1,uint16,狀態字,-,-,0x0000-0xFFFF,status_word,同0x191格式
+0x193,Inverter Status RL,逆變器,後左逆變器狀態,8,Little-endian,2-3,int16,回饋扭矩,0.001,額定扭矩,±32.767,feedback_torque_raw / 1000.0,同0x191格式
+0x193,Inverter Status RL,逆變器,後左逆變器狀態,8,Little-endian,4-5,int16,轉速,1,RPM,±32767,speed_raw,同0x191格式
+0x194,Inverter Status RR,逆變器,後右逆變器狀態,8,Little-endian,0-1,uint16,狀態字,-,-,0x0000-0xFFFF,status_word,同0x191格式
+0x194,Inverter Status RR,逆變器,後右逆變器狀態,8,Little-endian,2-3,int16,回饋扭矩,0.001,額定扭矩,±32.767,feedback_torque_raw / 1000.0,同0x191格式
+0x194,Inverter Status RR,逆變器,後右逆變器狀態,8,Little-endian,4-5,int16,轉速,1,RPM,±32767,speed_raw,同0x191格式
+0x291,Inverter State FL,逆變器,前左逆變器電源,8,Little-endian,0-1,uint16,直流電壓,0.01,V,0-655.35,dc_voltage_raw / 100.0,
+0x291,Inverter State FL,逆變器,前左逆變器電源,8,Little-endian,2-3,uint16,直流電流,0.01,A,0-655.35,dc_current_raw / 100.0,
+0x292,Inverter State FR,逆變器,前右逆變器電源,8,Little-endian,0-1,uint16,直流電壓,0.01,V,0-655.35,dc_voltage_raw / 100.0,同0x291格式
+0x292,Inverter State FR,逆變器,前右逆變器電源,8,Little-endian,2-3,uint16,直流電流,0.01,A,0-655.35,dc_current_raw / 100.0,同0x291格式
+0x293,Inverter State RL,逆變器,後左逆變器電源,8,Little-endian,0-1,uint16,直流電壓,0.01,V,0-655.35,dc_voltage_raw / 100.0,同0x291格式
+0x293,Inverter State RL,逆變器,後左逆變器電源,8,Little-endian,2-3,uint16,直流電流,0.01,A,0-655.35,dc_current_raw / 100.0,同0x291格式
+0x294,Inverter State RR,逆變器,後右逆變器電源,8,Little-endian,0-1,uint16,直流電壓,0.01,V,0-655.35,dc_voltage_raw / 100.0,同0x291格式
+0x294,Inverter State RR,逆變器,後右逆變器電源,8,Little-endian,2-3,uint16,直流電流,0.01,A,0-655.35,dc_current_raw / 100.0,同0x291格式
+0x391,Inverter Temperature FL,逆變器,前左逆變器溫度,8,Little-endian,0-1,int16,逆變器MOS溫度,0.1,°C,±3276.7,mos_temp_raw * 0.1,
+0x391,Inverter Temperature FL,逆變器,前左逆變器溫度,8,Little-endian,2-3,int16,MCU溫度,0.1,°C,±3276.7,mcu_temp_raw * 0.1,
+0x391,Inverter Temperature FL,逆變器,前左逆變器溫度,8,Little-endian,4-5,int16,馬達溫度,0.1,°C,±3276.7,motor_temp_raw * 0.1,
+0x392,Inverter Temperature FR,逆變器,前右逆變器溫度,8,Little-endian,0-1,int16,逆變器MOS溫度,0.1,°C,±3276.7,mos_temp_raw * 0.1,同0x391格式
+0x392,Inverter Temperature FR,逆變器,前右逆變器溫度,8,Little-endian,2-3,int16,MCU溫度,0.1,°C,±3276.7,mcu_temp_raw * 0.1,同0x391格式
+0x392,Inverter Temperature FR,逆變器,前右逆變器溫度,8,Little-endian,4-5,int16,馬達溫度,0.1,°C,±3276.7,motor_temp_raw * 0.1,同0x391格式
+0x393,Inverter Temperature RL,逆變器,後左逆變器溫度,8,Little-endian,0-1,int16,逆變器MOS溫度,0.1,°C,±3276.7,mos_temp_raw * 0.1,同0x391格式
+0x393,Inverter Temperature RL,逆變器,後左逆變器溫度,8,Little-endian,2-3,int16,MCU溫度,0.1,°C,±3276.7,mcu_temp_raw * 0.1,同0x391格式
+0x393,Inverter Temperature RL,逆變器,後左逆變器溫度,8,Little-endian,4-5,int16,馬達溫度,0.1,°C,±3276.7,motor_temp_raw * 0.1,同0x391格式
+0x394,Inverter Temperature RR,逆變器,後右逆變器溫度,8,Little-endian,0-1,int16,逆變器MOS溫度,0.1,°C,±3276.7,mos_temp_raw * 0.1,同0x391格式
+0x394,Inverter Temperature RR,逆變器,後右逆變器溫度,8,Little-endian,2-3,int16,MCU溫度,0.1,°C,±3276.7,mcu_temp_raw * 0.1,同0x391格式
+0x394,Inverter Temperature RR,逆變器,後右逆變器溫度,8,Little-endian,4-5,int16,馬達溫度,0.1,°C,±3276.7,motor_temp_raw * 0.1,同0x391格式
+0x711,Inverter Heartbeat FL,逆變器,前左逆變器心跳,1,Little-endian,0,uint8,心跳信號,-,-,0x7F=OK/其他=異常,heartbeat,
+0x712,Inverter Heartbeat FR,逆變器,前右逆變器心跳,1,Little-endian,0,uint8,心跳信號,-,-,0x7F=OK/其他=異常,heartbeat,同0x711格式
+0x713,Inverter Heartbeat RL,逆變器,後左逆變器心跳,1,Little-endian,0,uint8,心跳信號,-,-,0x7F=OK/其他=異常,heartbeat,同0x711格式
+0x714,Inverter Heartbeat RR,逆變器,後右逆變器心跳,1,Little-endian,0,uint8,心跳信號,-,-,0x7F=OK/其他=異常,heartbeat,同0x711格式
