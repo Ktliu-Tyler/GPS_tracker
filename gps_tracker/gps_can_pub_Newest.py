@@ -62,7 +62,7 @@ class CanPublisher(Node):
             days_since_1984 = int((now - 441763200) // 86400)
             
             # 準備資料 (little endian, 參考timer_can_pub.py)
-            timestamp_data = ms_since_midnight.to_bytes(4, 'little') + days_since_1984.to_bytes(2, 'little') + b'\x00\x00'
+            timestamp_data = ms_since_midnight.to_bytes(4, 'little') + days_since_1984.to_bytes(2, 'little')
             
             # 發送CAN訊息
             can_msg = can.Message(
