@@ -78,6 +78,7 @@ class CanReceiver(Node):
                 'soc': None, 'voltage': None, 'current': None, 'temperature': None,
                 'status': None, 'heartbeat': None, 'capacity': None,
                 'cell_voltages': [None] * 105, 'cell_temperatures': [None] * 224,
+                'all_voltages': None, 'segment_voltages': [None] * 7, 'segment_temperatures': [None] * 7,
                 'last_update': None
             },
             'inverters': {
@@ -105,7 +106,12 @@ class CanReceiver(Node):
             'vcu': {
                 'steer': None, 'accel': None, 'apps1': None,    
                 'apps2': None, 'brake': None, 'bse1': None, 'bse2': None,
-                'last_update': None}
+                'last_update': None
+            },
+            'canlogging': {
+                'is_recording': False, 'start_time': None, 'start_timestamp': None,
+                'last_update': None
+            }
         }
         
         self.message_count = 0
@@ -124,7 +130,7 @@ class CanReceiver(Node):
         
         # Dashboard display timer (only for dashboard mode)
         if self.display_mode == 'dashboard':
-            self.display_timer = self.create_timer(0.1, self.update_dashboard)  # 100ms
+            self.display_timer = self.create_timer(0.05, self.update_dashboard)  # 50ms
             os.system('clear')  # Clear screen initially
             mode_str = "CSV Playback" if self.use_csv else "Real CAN"
             self.get_logger().info(f"CAN Receiver Node Started - Dashboard Mode ({mode_str})")
@@ -256,7 +262,9 @@ class CanReceiver(Node):
                 self.decode_position_covariance(data, can_id - 0x410)
             elif can_id == 0x419:  # Position covariance type
                 self.decode_position_covariance_type(data)
-                
+            
+            
+
             # 速度資料解碼
             elif can_id == 0x402:  # X方向線性速度
                 self.decode_velocity_x(data)
@@ -301,6 +309,9 @@ class CanReceiver(Node):
             elif 0x210 <= can_id <= 0x214:  # Inverter Control (0x210+X, X=0-4)
                 inv_num = can_id - 0x210
                 self.decode_inverter_control(data, inv_num)
+            
+            elif can_id == 0x421:
+                self.decode_canlogging_status(data)
 
                 
         except Exception as e:
@@ -329,6 +340,35 @@ class CanReceiver(Node):
                 f"Days since 1984: {days_since_1984}, "
                 f"Decoded time: {decoded_time.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}"
             )
+
+    def decode_canlogging_status(self, data):
+        """解碼 CAN Logging 狀態 (0x421)"""
+        if len(data) >= 1:
+            status_byte = data[0]
+            current_time = time.time()
+            
+            if status_byte == 0x01:
+                # 正在記錄，解析開始時間
+                if len(data) >= 5:
+                    # 從 bytes 1-4 重建 timestamp (little-endian)
+                    timestamp = (data[4] << 24) | (data[3] << 16) | (data[2] << 8) | data[1]
+                    start_time = datetime.fromtimestamp(timestamp)
+                    
+                    self.data_store['canlogging']['is_recording'] = True
+                    self.data_store['canlogging']['start_time'] = start_time
+                    self.data_store['canlogging']['start_timestamp'] = timestamp
+                else:
+                    # 沒有時間資訊，只設定狀態
+                    self.data_store['canlogging']['is_recording'] = True
+                    
+            elif status_byte == 0x00:
+                # 未記錄
+                self.data_store['canlogging']['is_recording'] = False
+                self.data_store['canlogging']['start_time'] = None
+                self.data_store['canlogging']['start_timestamp'] = None
+            
+            self.data_store['canlogging']['last_update'] = current_time
+
 
     def decode_vcu_cockpit(self, data):
         if len(data) >= 8:
@@ -577,10 +617,17 @@ class CanReceiver(Node):
             
             # 接下來 7 個位元組是溫度數值
             temperatures = []
+            temperatures_sum = 0
+            count = 0
             for i in range(1, min(8, len(data))):
                 temp = data[i] -32  
                 temperatures.append(temp)
-            
+                if temp != -13:
+                    temperatures_sum += temp
+                    count += 1
+            if count > 0:
+                temperatures_avg = temperatures_sum / count
+                self.data_store['accumulator']['segment_temperatures'][index // 32] = temperatures_avg
             # 更新一維陣列中對應位置的數值
             current_time = time.time()
             for i, temp in enumerate(temperatures):
@@ -893,6 +940,15 @@ class CanReceiver(Node):
             print(f"[Data Time]    {time_str}")
         else:
             print(f"[Data Time]    N/A")
+        # print("-" * 90)
+
+        canlogging = self.data_store['canlogging']
+        if canlogging['is_recording']:
+            start_time = canlogging['start_time'].strftime('%Y-%m-%d %H:%M:%S')
+            elapsed_time = time.time() - canlogging['start_timestamp']
+            print(f"[CAN Logging]  Recording started at {start_time}, Elapsed: {elapsed_time:.2f} seconds")
+        else:
+            print(f"[CAN Logging]  Not recording")
         print("-" * 90)
         
         # VCU Section

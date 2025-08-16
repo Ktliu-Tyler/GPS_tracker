@@ -36,6 +36,7 @@ setup(
         'timer_can_pub = gps_tracker.timer_can_pub:main',
         'system_test_pub = gps_tracker.system_test_publisher:main',
         'can_test_pub = gps_tracker.can_test_publisher:main',
+        'nmea_gps_can = gps_tracker.new.nmea_gps_can:main',
     ],
 },
 )
