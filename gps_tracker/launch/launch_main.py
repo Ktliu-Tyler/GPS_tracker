@@ -9,7 +9,7 @@ def generate_launch_description():
     return LaunchDescription([
         Node(
             package='gps_tracker',
-            executable='gps_can_pub',
+            executable='gps_can_pub_Newest',
             name='gps_can_pub_node',
             output='screen',
             parameters=[],
@@ -17,15 +17,15 @@ def generate_launch_description():
             respawn_delay=2.0
         ),
 
-        Node(
-            package='gps_tracker',
-            executable='timer_can_pub',
-            name='timer_node',
-            output='screen',
-            parameters=[],
-            respawn=True,
-            respawn_delay=2.0
-        ),
+        # Node(
+        #     package='gps_tracker',
+        #     executable='timer_can_pub',
+        #     name='timer_node',
+        #     output='screen',
+        #     parameters=[],
+        #     respawn=True,
+        #     respawn_delay=2.0
+        # ),
         
         Node(
             package='gps_tracker',
