@@ -196,7 +196,7 @@ class Ros2NMEADriver(Node):
                 if data['longitude_direction'] == 'W':
                     longitude = -longitude
 
-                if not self.valid and abs(latitude - self.lat_range) < 1 and abs(longitude - self.long_range) < 1:
+                if not self.valid and abs(latitude - self.lat_range) < 10 and abs(longitude - self.long_range) < 10:
                     self.last_lat = latitude
                     self.last_long = longitude
                     self.valid = True
@@ -289,7 +289,7 @@ class Ros2NMEADriver(Node):
                     if data['longitude_direction'] == 'W':
                         longitude = -longitude
 
-                    if not self.valid and abs(latitude - self.lat_range) < 1 and abs(longitude - self.long_range) < 1:
+                    if not self.valid and abs(latitude - self.lat_range) < 10 and abs(longitude - self.long_range) < 10:
                         self.last_lat = latitude
                         self.last_long = longitude
                         self.valid = True
@@ -415,6 +415,7 @@ class NtripClient(object):
         self.maxConnectTime=maxConnectTime
         self.socket=None
         self.stream = serial.Serial('/dev/ttyUSB0', 115200, timeout=3)
+        # self.stream = serial.Serial('/dev/ttyAMA10', 38400, timeout=3)
         self.nmr = NMEAReader(self.stream)
         self.driver = Ros2NMEADriver()
         self.frame_id = self.driver.get_frame_id()
@@ -456,15 +457,29 @@ class NtripClient(object):
         return bytes(mountPointString,'ascii')
 
     def getGGABytes(self):
+        gga_search_count = 0
         while True:
             try:
+                if self.verbose and gga_search_count % 10 == 0:
+                    self.driver.get_logger().info("Searching for GGA sentence from local GPS...")
+                gga_search_count += 1
+
                 (raw_data, parsed_data) = self.nmr.read()
-                if bytes("GNGGA",'ascii') in raw_data :
-                    # print(parsed_data)
-                    return raw_data
+
+                if raw_data is not None:
+                    # Log any received data for debugging
+                    self.driver.get_logger().debug(f"GPS Raw Data: {raw_data.decode('ascii', 'ignore')}")
+                    if bytes("GNGGA", 'ascii') in raw_data:
+                        self.driver.get_logger().info(f"Found GGA sentence: {raw_data.decode('ascii', 'ignore')}")
+                        return raw_data
+                else:
+                    # Log if no data is read
+                    if self.verbose and gga_search_count % 10 == 0:
+                        self.driver.get_logger().debug("No data read from GPS stream.")
+
             except (serial.SerialException, UnicodeDecodeError) as e:
                 if self.verbose:
-                    self.driver.get_logger().debug(f"Error reading NMEA data: {e}")
+                    self.driver.get_logger().warning(f"Error reading/decoding NMEA data: {e}")
                 continue
 
     def readData(self):
@@ -496,6 +511,8 @@ class NtripClient(object):
                         try:
                             header_lines = casterResponse.decode('utf-8').split("\r\n")
                         except UnicodeDecodeError:
+                            self.driver.get_logger().error("Failed to decode header as UTF-8. Caster might be sending binary data.")
+                            self.driver.get_logger().error(f"Raw Caster Response (first 100 bytes): {casterResponse[:100]}")
                             self.driver.get_logger().debug("header not found yet, error occured, retrying....")
                             continue
                         
@@ -537,40 +554,66 @@ class NtripClient(object):
 
 
 
+                    last_gga_send_time = time.time()
+                    self.socket.setblocking(False)  # Use non-blocking socket
+
                     data = "Initial data"
                     while data:
                         try:
-                            data=self.socket.recv(self.buffer)
-                            # self.out.buffer.write(data)
-                            self.stream.write(data)
+                            # Part 1: Periodically send GGA to keep connection alive
+                            if time.time() - last_gga_send_time > 10:
+                                try:
+                                    gga_bytes = self.getGGABytes()
+                                    if gga_bytes:
+                                        self.socket.sendall(gga_bytes)
+                                        last_gga_send_time = time.time()
+                                        if self.verbose:
+                                            self.driver.get_logger().info("Sent GGA heartbeat to NTRIP caster.")
+                                except Exception as e:
+                                    self.driver.get_logger().warning(f"Could not send GGA heartbeat: {e}")
+                                    data = False  # Assume connection is dead
+                                    continue
+
+                            # Part 2: Receive data from NTRIP caster (non-blocking)
+                            try:
+                                data = self.socket.recv(self.buffer)
+                                if data:
+                                    self.stream.write(data)
+                            except BlockingIOError:
+                                # It's normal to have no data, just continue
+                                data = "Keep running" 
+                                time.sleep(0.1) # Small sleep to prevent busy-looping
+                            except socket.timeout:
+                                if self.verbose:
+                                    self.driver.get_logger().debug('Connection TimedOut\n')
+                                data=False
+                                continue
+                            except socket.error as e:
+                                if self.verbose:
+                                    self.driver.get_logger().debug(f'Connection Error: {e}\n')
+                                data=False
+                                continue
+
+                            # Part 3: Read from local GPS and process
                             try:
                                 (raw_data, parsed_data) = self.nmr.read()
-                                if bytes("GNGGA",'ascii') in raw_data or bytes("GNRMC", 'ascii') in raw_data:
-                                    self.driver.get_logger().debug(raw_data.decode('utf-8'))
-                                    self.driver.add_sentence(raw_data.decode('utf-8'), self.frame_id)
+                                if raw_data is not None and (
+                                    bytes("GNGGA",'ascii') in raw_data or bytes("GNRMC", 'ascii') in raw_data
+                                ):
+                                    self.driver.get_logger().debug(raw_data.decode('utf-8', 'ignore'))
+                                    self.driver.add_sentence(raw_data.decode('utf-8', 'ignore'), self.frame_id)
                             except (serial.SerialException, UnicodeDecodeError) as nmea_error:
                                 if self.verbose:
                                     self.driver.get_logger().debug(f"Error reading NMEA data: {nmea_error}")
-                                continue
+                                
+                            if self.maxConnectTime and (datetime.datetime.now() > connectTime + EndConnect):
+                                if self.verbose:
+                                    self.driver.get_logger().error("Connection Time exceeded\n")
+                                sys.exit(0)
 
-#                            print datetime.datetime.now()-connectTime
-                            if self.maxConnectTime :
-                                if datetime.datetime.now() > connectTime+EndConnect:
-                                    if self.verbose:
-                                        self.driver.get_logger().error("Connection Timed exceeded\n")
-                                    sys.exit(0)
-#                            self.socket.sendall(self.getGGAString())
-
-
-
-                        except socket.timeout:
-                            if self.verbose:
-                                self.driver.get_logger().debug('Connection TimedOut\n')
-                            data=False
-                        except socket.error:
-                            if self.verbose:
-                                self.driver.get_logger().debug('Connection Error\n')
-                            data=False
+                        except Exception as e:
+                            self.driver.get_logger().error(f"An unexpected error occurred in the main loop: {e}")
+                            data = False
 
                     if self.verbose:
                         self.driver.get_logger().debug('Closing Connection\n')

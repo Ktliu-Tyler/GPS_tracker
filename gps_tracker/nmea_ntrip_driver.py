@@ -56,8 +56,8 @@ def main(args=None):
     ntripArgs['port']=2101
     # ntripArgs['mountpoint']="Navi-test"
     # ntripArgs['mountpoint']="MIE_UNIV"
-    ntripArgs['mountpoint']="No1bio_01"
-    # ntripArgs['mountpoint']="DmitBase"
+    # ntripArgs['mountpoint']="No1bio_01"
+    ntripArgs['mountpoint']="DmitBase"
     if ntripArgs['mountpoint'][0:1] !="/":
         ntripArgs['mountpoint'] = "/"+ntripArgs['mountpoint']
 
