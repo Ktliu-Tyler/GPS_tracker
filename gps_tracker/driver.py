@@ -53,7 +53,7 @@ from std_msgs.msg import String
 
 
 class Ros2NMEADriver(Node):
-    def __init__(self, longtitude_range = 121, latitude_range = 25):
+    def __init__(self, longtitude_range = 121, latitude_range = 24):
         super().__init__('nturt_nmea_navsat_driver')
 
         self.fix_pub = self.create_publisher(NavSatFix, 'fix', 10)
@@ -204,12 +204,12 @@ class Ros2NMEADriver(Node):
                 if not self.valid:
                     return
 
-                if abs(latitude - self.lat_range) > 1:
+                if abs(latitude - self.lat_range) > 5:
                     latitude = self.last_lat
                 current_fix.latitude = float(latitude)
                 self.last_lat = latitude
 
-                if abs(longitude - self.long_range) > 1:
+                if abs(longitude - self.long_range) > 5:
                     longitude = self.last_long
                 current_fix.longitude = float(longitude)
                 self.last_long = longitude
@@ -297,12 +297,12 @@ class Ros2NMEADriver(Node):
                     if not self.valid:
                         return
 
-                    if abs(latitude - self.lat_range) > 1:
+                    if abs(latitude - self.lat_range) > 10:
                         latitude = self.last_lat
                     current_fix.latitude = float(latitude)
                     self.last_lat = latitude
 
-                    if abs(longitude - self.long_range) > 1:
+                    if abs(longitude - self.long_range) > 10:
                         longitude = self.last_long
                     current_fix.longitude = float(longitude)
                     self.last_long = longitude
@@ -387,8 +387,8 @@ class NtripClient(object):
                  caster="",
                  mountpoint="",
                  host=False,
-                 lat=46,
-                 lon=122,
+                 lat=34,
+                 lon=136,
                  height=1212,
                  ssl=False,
                  verbose=False,

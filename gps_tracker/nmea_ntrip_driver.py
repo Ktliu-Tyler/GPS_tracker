@@ -41,8 +41,8 @@ def main(args=None):
     rclpy.init(args=args)
 
     ntripArgs = {}
-    ntripArgs['lat'] = 0.0
-    ntripArgs['lon'] = 0.0
+    ntripArgs['lat'] = 24.0
+    ntripArgs['lon'] = 120.0
     ntripArgs['height'] = 0.0
     ntripArgs['host'] = False
     ntripArgs['ssl'] = False
@@ -54,10 +54,14 @@ def main(args=None):
     # ntripArgs['user']="ktliu1995@gmail.com"+":"+"940124"
     ntripArgs['caster']="3.143.243.81"
     ntripArgs['port']=2101
+    
+    # ntripArgs['mountpoint']="DoshishaUniv"
+    # ntripArgs['mountpoint']="WakayamaTest"
     # ntripArgs['mountpoint']="Navi-test"
     # ntripArgs['mountpoint']="MIE_UNIV"
     # ntripArgs['mountpoint']="No1bio_01"
-    ntripArgs['mountpoint']="DmitBase"
+    ntripArgs['mountpoint']="TWNTPEDATONG1"
+    # ntripArgs['mountpoint']="DmitBase"
     if ntripArgs['mountpoint'][0:1] !="/":
         ntripArgs['mountpoint'] = "/"+ntripArgs['mountpoint']
 
@@ -87,7 +91,7 @@ def main(args=None):
             print ("Uncrypted Connection")
         print ("")
     ntrip_client = NtripClient(**ntripArgs)
-    print("hello3")
+    print("hello")
     # try:
     ntrip_client.readData()
     # except Exception:
