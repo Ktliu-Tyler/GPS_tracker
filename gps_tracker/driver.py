@@ -41,6 +41,7 @@ import base64
 import time
 import serial
 import ssl
+import threading
 from pynmeagps import NMEAReader
 
 from rclpy.node import Node
@@ -414,11 +415,22 @@ class NtripClient(object):
         self.headerOutput=headerOutput
         self.maxConnectTime=maxConnectTime
         self.socket=None
-        self.stream = serial.Serial('/dev/ttyUSB0', 115200, timeout=3)
+        
+        # Serial port 配置和鎖定
+        self.stream = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
+        self.serial_lock = threading.Lock()  # 防止讀寫衝突
+        self.stream.reset_input_buffer()
+        self.stream.reset_output_buffer()
+        time.sleep(0.5)  # 等待穩定
+        
         # self.stream = serial.Serial('/dev/ttyAMA10', 38400, timeout=3)
         self.nmr = NMEAReader(self.stream)
         self.driver = Ros2NMEADriver()
         self.frame_id = self.driver.get_frame_id()
+        
+        # 錯誤追蹤
+        self.consecutive_read_errors = 0
+        self.max_consecutive_errors = 50
 
 
     def setPosition(self, lat, lon):
@@ -458,29 +470,73 @@ class NtripClient(object):
 
     def getGGABytes(self):
         gga_search_count = 0
-        while True:
+        max_attempts = 100
+        
+        # 清空緩衝區，避免讀到舊資料
+        with self.serial_lock:
+            self.stream.reset_input_buffer()
+        time.sleep(0.1)
+        
+        while gga_search_count < max_attempts:
             try:
-                if self.verbose and gga_search_count % 10 == 0:
-                    self.driver.get_logger().info("Searching for GGA sentence from local GPS...")
+                if self.verbose and gga_search_count % 20 == 0:
+                    self.driver.get_logger().info(f"Searching for GGA sentence... (attempt {gga_search_count})")
                 gga_search_count += 1
 
-                (raw_data, parsed_data) = self.nmr.read()
+                # 使用鎖定讀取資料
+                with self.serial_lock:
+                    if self.stream.in_waiting == 0:
+                        time.sleep(0.1)
+                        continue
+                    (raw_data, parsed_data) = self.nmr.read()
 
                 if raw_data is not None:
-                    # Log any received data for debugging
-                    self.driver.get_logger().debug(f"GPS Raw Data: {raw_data.decode('ascii', 'ignore')}")
-                    if bytes("GNGGA", 'ascii') in raw_data:
-                        self.driver.get_logger().info(f"Found GGA sentence: {raw_data.decode('ascii', 'ignore')}")
+                    raw_str = raw_data.decode('ascii', 'ignore').strip()
+                    
+                    # 驗證 checksum
+                    if '*' in raw_str:
+                        try:
+                            sentence, checksum = raw_str.rsplit('*', 1)
+                            calculated = 0
+                            for c in sentence[1:]:  # Skip $
+                                calculated ^= ord(c)
+                            if f"{calculated:02X}" != checksum.upper():
+                                if self.verbose:
+                                    self.driver.get_logger().debug(f"Invalid checksum: {raw_str}")
+                                continue
+                        except:
+                            continue
+                    
+                    # 找到有效的 GGA
+                    if bytes("GNGGA", 'ascii') in raw_data or bytes("GPGGA", 'ascii') in raw_data:
+                        self.driver.get_logger().info(f"Found valid GGA: {raw_str}")
+                        self.consecutive_read_errors = 0
                         return raw_data
-                else:
-                    # Log if no data is read
-                    if self.verbose and gga_search_count % 10 == 0:
-                        self.driver.get_logger().debug("No data read from GPS stream.")
 
             except (serial.SerialException, UnicodeDecodeError) as e:
-                if self.verbose:
-                    self.driver.get_logger().warning(f"Error reading/decoding NMEA data: {e}")
+                self.consecutive_read_errors += 1
+                if self.verbose and self.consecutive_read_errors % 10 == 0:
+                    self.driver.get_logger().warning(f"Error reading GPS ({self.consecutive_read_errors} consecutive): {e}")
+                
+                # 如果錯誤太多，重置 serial port
+                if self.consecutive_read_errors > self.max_consecutive_errors:
+                    self.driver.get_logger().error("Too many consecutive errors, resetting serial port")
+                    try:
+                        with self.serial_lock:
+                            self.stream.close()
+                            time.sleep(1)
+                            self.stream = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
+                            self.stream.reset_input_buffer()
+                            self.nmr = NMEAReader(self.stream)
+                        self.consecutive_read_errors = 0
+                    except Exception as reset_error:
+                        self.driver.get_logger().error(f"Failed to reset: {reset_error}")
+                
+                time.sleep(0.1)
                 continue
+        
+        self.driver.get_logger().error("Could not find valid GGA after max attempts")
+        return None
 
     def readData(self):
         reconnectTry=1
@@ -578,11 +634,18 @@ class NtripClient(object):
                             try:
                                 data = self.socket.recv(self.buffer)
                                 if data:
-                                    self.stream.write(data)
+                                    # 使用鎖定寫入 NTRIP 資料
+                                    with self.serial_lock:
+                                        # 檢查緩衝區，避免溢出
+                                        if self.stream.in_waiting < 2000:
+                                            self.stream.write(data)
+                                            time.sleep(0.01)  # 10ms 延遲，避免衝突
+                                        else:
+                                            self.driver.get_logger().warning("Serial buffer full, skipping NTRIP write")
                             except BlockingIOError:
                                 # It's normal to have no data, just continue
                                 data = "Keep running" 
-                                time.sleep(0.1) # Small sleep to prevent busy-looping
+                                time.sleep(0.05) # 50ms sleep to prevent busy-looping
                             except socket.timeout:
                                 if self.verbose:
                                     self.driver.get_logger().debug('Connection TimedOut\n')
@@ -596,15 +659,44 @@ class NtripClient(object):
 
                             # Part 3: Read from local GPS and process
                             try:
-                                (raw_data, parsed_data) = self.nmr.read()
-                                if raw_data is not None and (
-                                    bytes("GNGGA",'ascii') in raw_data or bytes("GNRMC", 'ascii') in raw_data
-                                ):
-                                    self.driver.get_logger().debug(raw_data.decode('utf-8', 'ignore'))
-                                    self.driver.add_sentence(raw_data.decode('utf-8', 'ignore'), self.frame_id)
+                                # 使用鎖定讀取 GPS
+                                with self.serial_lock:
+                                    if self.stream.in_waiting > 0:
+                                        (raw_data, parsed_data) = self.nmr.read()
+                                    else:
+                                        raw_data = None
+                                
+                                if raw_data is not None:
+                                    raw_str = raw_data.decode('utf-8', 'ignore').strip()
+                                    
+                                    # 驗證 checksum
+                                    if '*' in raw_str:
+                                        try:
+                                            sentence, checksum = raw_str.rsplit('*', 1)
+                                            calculated = 0
+                                            for c in sentence[1:]:
+                                                calculated ^= ord(c)
+                                            if f"{calculated:02X}" != checksum.upper():
+                                                continue  # 跳過 checksum 錯誤的句子
+                                        except:
+                                            continue
+                                    
+                                    # 處理有效的 GPS 句子
+                                    if (bytes("GNGGA",'ascii') in raw_data or bytes("GNRMC", 'ascii') in raw_data or
+                                        bytes("GPGGA",'ascii') in raw_data or bytes("GPRMC", 'ascii') in raw_data):
+                                        self.driver.get_logger().debug(raw_str)
+                                        self.driver.add_sentence(raw_str, self.frame_id)
+                                        self.consecutive_read_errors = 0
+                                        
                             except (serial.SerialException, UnicodeDecodeError) as nmea_error:
-                                if self.verbose:
-                                    self.driver.get_logger().debug(f"Error reading NMEA data: {nmea_error}")
+                                self.consecutive_read_errors += 1
+                                if self.verbose and self.consecutive_read_errors % 20 == 0:
+                                    self.driver.get_logger().warning(f"Error reading NMEA ({self.consecutive_read_errors}): {nmea_error}")
+                                
+                                # 錯誤過多時重置
+                                if self.consecutive_read_errors > self.max_consecutive_errors:
+                                    self.driver.get_logger().error("Too many GPS read errors, will reconnect...")
+                                    data = False
                                 
                             if self.maxConnectTime and (datetime.datetime.now() > connectTime + EndConnect):
                                 if self.verbose:

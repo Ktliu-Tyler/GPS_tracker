@@ -31,6 +31,8 @@ setup(
         'gps_csv_logger = gps_tracker.gps_csv_logger:main',
         'gps_can_pub = gps_tracker.gps_can_pub:main',
         'gps_can_pub_Newest = gps_tracker.gps_can_pub_Newest:main',
+        'gps_can_pub_optimized = gps_tracker.gps_can_pub_optimized:main',
+        'gps_can_pub_lowrate = gps_tracker.gps_can_pub_lowrate:main',
         'gps_can_pub_newEncode = gps_tracker.gps_can_pub_newEncode:main',
         'gps_can_rec = gps_tracker.gps_can_rec:main',
         'nmea_ntrip_driver = gps_tracker.nmea_ntrip_driver:main',

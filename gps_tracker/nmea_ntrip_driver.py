@@ -59,9 +59,10 @@ def main(args=None):
     # ntripArgs['mountpoint']="WakayamaTest"
     # ntripArgs['mountpoint']="Navi-test"
     # ntripArgs['mountpoint']="MIE_UNIV"
-    # ntripArgs['mountpoint']="No1bio_01"
+    # ntripArgs['mountpoint']="No1bio_02"
     ntripArgs['mountpoint']="TWNTPEDATONG1"
     # ntripArgs['mountpoint']="DmitBase"
+    # ntripArgs['mountpoint']="tmmarc"
     if ntripArgs['mountpoint'][0:1] !="/":
         ntripArgs['mountpoint'] = "/"+ntripArgs['mountpoint']
 
