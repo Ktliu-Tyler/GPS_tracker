@@ -11,8 +11,8 @@ from datetime import datetime
 class CanPublisher(Node):
     def __init__(self):
         super().__init__('can_publisher')
-        self.bus = can.interface.Bus(channel='can0', bustype='socketcan')
-        
+        self.bus = can.interface.Bus(channel='can1', bustype='socketcan')
+        self.bus2 = can.interface.Bus(channel='can0', bustype='socketcan')
         # 儲存最新的速度資料，用於GPS callback中發送
         self.latest_velocity = None
         
@@ -70,7 +70,7 @@ class CanPublisher(Node):
                 data=timestamp_data, 
                 is_extended_id=False
             )
-            self.bus.send(can_msg)
+            self.bus2.send(can_msg)
             
             # 發布ROS2訊息
             ros_msg = UInt8MultiArray()
@@ -91,19 +91,26 @@ class CanPublisher(Node):
 
     def gps_callback(self, msg: NavSatFix):
         try:
-            # Ecumaster 格式編碼 - 0x400 (GPS基本資訊)
-            # 只使用 NavSatFix 中可用的資料：latitude, longitude
-            lat_scaled = int(msg.latitude * 10**7)
-            lat_bytes = struct.pack('<i', lat_scaled)
+            # 檢查 GPS 狀態，如果 status < 0，輸出無效值 -1
+            if msg.status.status < 0:
+                lat_scaled = -10000000  # -1 度 * 10^7
+                lon_scaled = -10000000  # -1 度 * 10^7
+                height_scaled = -1
+                self.get_logger().warn("GPS status < 0, outputting invalid values (-1)")
+            else:
+                # Ecumaster 格式編碼 - 0x400 (GPS基本資訊)
+                # 只使用 NavSatFix 中可用的資料：latitude, longitude
+                lat_scaled = int(msg.latitude * 10**7)
+                lon_scaled = int(msg.longitude * 10**7)
+                # 高度：使用 NavSatFix 的 altitude
+                height_scaled = int(msg.altitude) if not float('inf') == msg.altitude and not float('-inf') == msg.altitude else 0
             
-            lon_scaled = int(msg.longitude * 10**7)
+            lat_bytes = struct.pack('<i', lat_scaled)
             lon_bytes = struct.pack('<i', lon_scaled)
             
             # 組合成 8-byte 資料 (緯度4字節 + 經度4字節)
             gps_basic_data = lat_bytes + lon_bytes
             
-            # 高度：使用 NavSatFix 的 altitude
-            height_scaled = int(msg.altitude) if not float('inf') == msg.altitude and not float('-inf') == msg.altitude else 0
             height_bytes = struct.pack('<h', height_scaled)
             
 
